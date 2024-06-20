@@ -1,0 +1,53 @@
+/* ---------------------------------------------------------------------------------------
+ * Classe....: UI
+ * Objetivo..: Limpar conteúdo dos objetos dos formulários 
+ * Parâmetros: Formulário corrente
+ * ----------------------------------------------------------------------------------------
+ * Autor: Rogerio Tonini
+ * Data.: 31/07/2021
+ * ----------------------------------------------------------------------------------------
+ * Fontes de pesquisa:
+ * https://www.blogson.com.br/classe-para-limpar-textbox-no-c-control/
+ * https://social.msdn.microsoft.com/Forums/pt-BR/9fe5b7f3-92e9-4f37-ba12-f802f44d620f/limpando-controles-dentro-de-groupbox?forum=504
+ * https://social.msdn.microsoft.com/Forums/pt-BR/1f965191-cb5b-4f28-922f-9d99f7cde961/funo-para-limpar-campos-do-formulrio?forum=vscsharppt
+ * ----------------------------------------------------------------------------------------
+ * Alterações realizadas:
+ * 
+ * 31/07/2021 - Adequar dentre as várias soluções encontradas na comunidade para a minha 
+ * necessidade e meus padrões.
+ */
+using System;
+using System.Windows.Forms;
+
+namespace [Projeto]
+{
+	class UI
+	{
+		public void LimpaCampos(Control controles)
+		{
+			// Faz um laço para todos os controles Existentes no FORM
+			foreach (Control ctrl in controles.Controls)
+			{
+				if (ctrl is TextBox) ((TextBox)(ctrl)).Text = String.Empty;               /*  Se o controle for um TextBox */
+
+				if (ctrl is RichTextBox) ((RichTextBox)(ctrl)).Text = string.Empty;       /* Se o controle for um RichTextBox */
+
+				if (ctrl is ComboBox) ((ComboBox)(ctrl)).SelectedIndex = -1;              /* Se o controle for um ComboBox, seleciona o item 0 */
+
+				if (ctrl is CheckBox) ((CheckBox)(ctrl)).Checked = false;                 /* Se o controle for um CheckBox */
+
+				if (ctrl is RadioButton) ((RadioButton)(ctrl)).Checked = false;           /* Se o controle for um CheckBox, desmarca todos os RadioButtons */
+
+				if (ctrl is CheckedListBox)
+				{
+					foreach (ListControl item in (ctrl as CheckedListBox).Items)
+						item.SelectedIndex = -1;
+				}
+				if (ctrl is ListView) (ctrl as ListView).Items.Clear();
+
+				// Limpa os objetos dentro de um GroupBox
+				this.LimpaCampos(ctrl);
+			}
+		}
+	}
+}
